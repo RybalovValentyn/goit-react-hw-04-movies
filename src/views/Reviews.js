@@ -13,7 +13,7 @@ export default function ReviewsViews() {
   useEffect(() => {
     fetcMovies.fetchMuvieViews(movieId).then(view => {
         setviews(view.results);
-        console.log(view.results);             
+                
       });
   }, [movieId]);
 

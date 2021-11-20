@@ -4,9 +4,12 @@ import * as fetcMovies from '../servises/MovieAPI';
 import PageHeader from '../components/pageHeader/PageHeader';
 import Pagination from '../components/pagination/Pagination';
 
+
 const RenderPage = lazy(() => import('./RenderPage'));
 
 export default function HomePage() {
+  const [movie, setmovie] = useState(null);
+ 
     const { url } = useRouteMatch();//для проверки совпадения адреса в аресной строке
     const [movies, setmovies] = useState(null);
    const[pagmov, setpagmov] = useState(null)

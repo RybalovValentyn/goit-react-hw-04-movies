@@ -4,6 +4,7 @@ import PageHeader from '../components/pageHeader/PageHeader';
 import * as fetcMovies from '../servises/MovieAPI';
 import s from './views.module.css'
 import { Link, Route, useRouteMatch,Switch} from 'react-router-dom';
+import { useHistory, useLocation} from 'react-router';
 
 const CastViews = lazy(() => import('./Cast'));
 const ReviewsViews = lazy(() => import('./Reviews'));
@@ -12,22 +13,27 @@ export default function MovieDetailsView() {
  const { url, path } = useRouteMatch();
   const {movieId } = useParams();//отслеживает динамические параметри useParams
   const [movie, setmovie] = useState(null);
-  
+  const location = useLocation();
+  const history = useHistory();
 
   useEffect(() => {
     fetcMovies.fetchMuvieById(movieId).then(movie => {
         setmovie(movie);
-        console.log(movie);
-        // console.log(movies.results[2].poster_path)
-       
+      
       });
   }, [movieId]);
-  console.log(movieId );
+
+
+  const onHandleClick = () =>{
+
+history.push(location?.state?.from?.location ?? '/')  //переход на страницу(отсылае в историю новую запись)
+  }
   return (
     <>
 
      {movie && <PageHeader className={s.headerDetails} text={`${movie.original_title}`} />}
-     
+
+     <button type="button" onClick={onHandleClick}>Back</button>
       {movie && (
       
         <div className={s.detailContainer}>
@@ -52,9 +58,25 @@ export default function MovieDetailsView() {
             <div className={s.castContainer}>
                 <h3>Additional Information </h3>
                 <ul>
-                <NavLink to={`${url}/cast`} > <li className={s.infoItem}>Cast</li></NavLink>
+                <NavLink 
+                to={{
+                  pathname: `${url}/cast`,//откуда
+                  state: {  
+                    from: { location  , label: 'go to movies' , search: history.location.search }                    //куда перешли
 
-                <NavLink to={`/movies/${movieId}/reviews`}><li className={s.infoItem}>Reviews</li></NavLink>
+                  }
+                }}
+                  
+                > <li className={s.infoItem}>Cast</li></NavLink>
+
+                <NavLink 
+                    to={{
+                      pathname: `${url}/reviews`,//откуда
+                    state: {  
+                     from: { location  , label: 'go to movies' , search: history.location.search }                    //куда перешли
+                         }
+                                }}
+              ><li className={s.infoItem}>Reviews</li></NavLink>
                 </ul>
             </div>
             <hr />

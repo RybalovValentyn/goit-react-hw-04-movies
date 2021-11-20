@@ -13,7 +13,7 @@ export default function CastViews() {
   useEffect(() => {
     fetcMovies.fetchMuvieCastiews(movieId).then(view => {
         setviews(view.cast);
-        console.log(view.cast);             
+                 
       });
   }, [movieId]);
 
